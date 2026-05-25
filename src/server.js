@@ -1,6 +1,7 @@
 const express = require('express');
 const config = require('./config');
 const logger = require('./logger');
+const { getDb } = require('./db/connection');
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,7 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(config.port, () => {
+  getDb();
   logger.info(`Project Zero running on port ${config.port} | mock=${config.fub.useMock}`);
 });
 
