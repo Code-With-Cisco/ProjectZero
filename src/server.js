@@ -6,10 +6,9 @@ const { getDb } = require('./db/connection');
 const app = express();
 app.use(express.json());
 
-// Webhook routes (mounted as they are built in later phases)
-// app.use('/webhooks/fub', require('./webhooks/fub-docs-signed'));
-// app.use('/webhooks/bamboohr', require('./webhooks/bamboohr-docs-signed'));
-// app.use('/webhooks/deel', require('./webhooks/deel-contract-signed'));
+app.use('/webhooks/fub', require('./webhooks/fub-docs-signed'));
+app.use('/webhooks/bamboohr', require('./webhooks/bamboohr-docs-signed'));
+app.use('/webhooks/deel', require('./webhooks/deel-contract-signed'));
 
 app.get('/health', (req, res) => {
   const api = require('./api');
