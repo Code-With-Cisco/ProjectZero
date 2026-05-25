@@ -4,7 +4,7 @@ const logger = require('./logger');
 const { getDb } = require('./db/connection');
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ verify: (req, _res, buf) => { req.rawBody = buf; } }));
 
 app.use('/webhooks/fub', require('./webhooks/fub-docs-signed'));
 app.use('/webhooks/bamboohr', require('./webhooks/bamboohr-docs-signed'));

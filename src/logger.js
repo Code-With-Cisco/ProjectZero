@@ -1,5 +1,9 @@
 const { createLogger, format, transports } = require('winston');
 const path = require('path');
+const fs = require('fs');
+
+const logsDir = path.join(__dirname, '../logs');
+fs.mkdirSync(logsDir, { recursive: true });
 
 module.exports = createLogger({
   level: 'info',

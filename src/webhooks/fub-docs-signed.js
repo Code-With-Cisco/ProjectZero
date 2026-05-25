@@ -5,8 +5,18 @@ const { getDb } = require('../db/connection');
 const { transform: toDeelPayload } = require('../transform/fub-to-deel');
 const { transform: toBambooPayload } = require('../transform/fub-to-bamboohr');
 const logger = require('../logger');
+const config = require('../config');
+const { verifySignature } = require('./verifySignature');
 
 router.post('/', async (req, res) => {
+  const secret = config.webhooks.fubSecret;
+  if (secret) {
+    const sig = req.headers['x-fub-signature'];
+    if (!sig || !verifySignature(req.rawBody, sig, secret)) {
+      return res.status(401).json({ ok: false, error: 'Invalid webhook signature' });
+    }
+  }
+
   const db = getDb();
   const payload = req.body;
   const webhookId = payload.id || `fub-${Date.now()}`;

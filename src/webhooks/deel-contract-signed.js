@@ -4,8 +4,18 @@ const api = require('../api');
 const { getDb } = require('../db/connection');
 const { transform: toJiraPayload, shippingSubtask } = require('../transform/deel-to-jira');
 const logger = require('../logger');
+const config = require('../config');
+const { verifySignature } = require('./verifySignature');
 
 router.post('/', async (req, res) => {
+  const secret = config.webhooks.deelSecret;
+  if (secret) {
+    const sig = req.headers['x-deel-signature'];
+    if (!sig || !verifySignature(req.rawBody, sig, secret)) {
+      return res.status(401).json({ ok: false, error: 'Invalid webhook signature' });
+    }
+  }
+
   const db = getDb();
   const payload = req.body;
   const webhookId = payload.id || `deel-${Date.now()}`;
