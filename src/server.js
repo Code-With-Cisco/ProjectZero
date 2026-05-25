@@ -15,9 +15,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', apis: api.status });
 });
 
-app.listen(config.port, () => {
+if (require.main === module) {
   getDb();
-  logger.info(`Project Zero running on port ${config.port} | mock=${config.fub.useMock}`);
-});
+  app.listen(config.port, () => {
+    logger.info(`Project Zero running on port ${config.port} | mock=${config.fub.useMock}`);
+  });
+}
 
 module.exports = app;
