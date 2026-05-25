@@ -12,7 +12,8 @@ app.use(express.json());
 // app.use('/webhooks/deel', require('./webhooks/deel-contract-signed'));
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', mock: config.fub.useMock });
+  const api = require('./api');
+  res.json({ status: 'ok', apis: api.status });
 });
 
 app.listen(config.port, () => {
